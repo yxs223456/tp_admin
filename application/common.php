@@ -662,45 +662,6 @@ function createToken($prefix = "")
 }
 
 /**
- * 生成xdOrder的sql
- * @param $info
- * @return string
- */
-function generateXdOrderReplaceSql($info) {
-
-    $vipGoodsIdArr = explode(",",
-        config('constants.openVipGoodsId'));
-
-    // 如果实际消费的人购买的是开通会员的特定商品之一
-    if (in_array($info["goodsId"], $vipGoodsIdArr)) {
-        $info["commission"] = "0.00";
-    }
-
-    $values = "'".createUuid()."',"
-        ."'".$info["orderNo"]."',"
-        ."'".$info["nickname"]."',"
-        ."'".$info["headImgUrl"]."',"
-        ."'".$info["unionid"]."',"
-        ."'".$info["goodsId"]."',"
-        ."'".$info["goodsImg"]."',"
-        ."'".$info["goodsName"]."',"
-        ."'".$info["createTime"]."',"
-        ."'".$info["orderStatus"]."',"
-        ."'".$info["commission"]."',"
-        ."'".$info["pid"]."',"
-        ."'".$info["isSettlement"]."',"
-        ."'".$info["realTotalMoney"]."'";
-
-    $sql = "replace into xd_order (id,
-            order_no, nickname, headimgurl, unionid, goods_id, 
-            goods_img, goods_name, yx_create_time, order_status,
-            commission, pid, is_settlement, real_total_money) VALUES ($values)";
-
-    return $sql;
-
-}
-
-/**
  * 生成有序 uuid
  * @return string
  */
@@ -720,7 +681,6 @@ function createUuid(){
     }
 
     return strtolower($key);
-
 }
 
 /**

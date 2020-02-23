@@ -7,18 +7,17 @@
  */
 namespace app\common\helper;
 
-use think\cache\driver\Redis as thinkRedis;
-class Redis extends thinkRedis
+class Redis
 {
     public static function factory()
     {
-        $redisConfig = config('constants.redis_config');
-        $redis = new self($redisConfig);
-        return $redis;
-    }
+        $redisConfig = config('account.redis');
+        $redis = new \Redis();
+        $redis->connect($redisConfig["host"], $redisConfig["port"], $redisConfig["timeout"]);
 
-    public function __call($name, $arguments)
-    {
-        return call_user_func_array([$this->handler, $name], $arguments);
+        if ($redisConfig["password"] != "") {
+            $redis->auth($redisConfig["password"]);
+        }
+        return $redis;
     }
 }

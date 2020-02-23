@@ -425,30 +425,13 @@ class App extends Container
             $data = $dispatch->run();
         } catch (\app\common\AppException $e) {
             $data = [
-                'status' => $e->getCode(),
+                'code' => $e->getCode(),
                 'msg' => $e->getMessage()
             ];
             $data = Response::create($data, 'json');
-        } catch (HttpResponseException $exception) {
+        }  catch (HttpResponseException $exception) {
             $dispatch = null;
             $data     = $exception->getResponse();
-        } catch (\Throwable $e) {
-            if (!empty($_SERVER['HTTP_HOST']) && stripos($_SERVER['HTTP_HOST'], 'xiao.local.com') !== false) {
-                $env = 'production';
-            } elseif (!empty($_SERVER['SERVER_NAME']) && stripos($_SERVER['SERVER_NAME'], 'xiao.local.com') !== false) {
-                $env = 'production';
-            } else {
-                $env = 'dev';
-            }
-            if ($env == 'production') {
-                $data = [
-                    'status' => -100,
-                    'msg' => "系统繁忙，请您稍后再试"
-                ];
-                $data = Response::create($data, 'json');
-            } else {
-                throw $e;
-            }
         }
 
         $this->middleware->add(function (Request $request, $next) use ($dispatch, $data) {
@@ -459,9 +442,7 @@ class App extends Container
 
         // 监听app_end
         $this->hook->listen('app_end', $response);
-        if ($response instanceof \think\response\Json) {
-            $this->log('[ RESPONSE ] ' . json_encode($response->getdata(), JSON_UNESCAPED_UNICODE));
-        }
+
         return $response;
     }
 

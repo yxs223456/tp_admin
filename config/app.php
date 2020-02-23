@@ -12,32 +12,6 @@
 // +----------------------------------------------------------------------
 // | 应用设置
 // +----------------------------------------------------------------------
-if (!function_exists('getAppEnvironment')) {
-    function getAppEnvironment() {
-        if (PHP_SAPI == 'cli') {
-            return 'dev';
-            /*exec('/sbin/ifconfig eth0 | sed -n \'s/^ *.*addr:\\([0-9.]\\{7,\\}\\) .*$/\\1/p\'',$arr);
-            if (is_array($arr) && count($arr)) {
-                $linuxIp = $arr[0];
-            } else {
-                $linuxIp = false;
-            }
-            if ($linuxIp && $linuxIp == '172.17.53.9') {//TODO 正式环境外网地址
-                return 'production';
-            } else {
-                return 'dev';
-            }*/
-        } else {
-            if (!empty($_SERVER['HTTP_HOST']) && stripos($_SERVER['HTTP_HOST'], 'api.mryx.365uxuan.com') !== false) {//TODO 正式环境api域名
-                return 'production';
-            } elseif (!empty($_SERVER['SERVER_NAME']) && stripos($_SERVER['SERVER_NAME'], 'api.mryx.365uxuan.com') !== false) {//TODO 正式环境api域名
-                return 'production';
-            } else {
-                return 'dev';
-            }
-        }
-    }
-}
 return [
     // 应用名称
     'app_name'               => '',
